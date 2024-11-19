@@ -62,62 +62,6 @@ int simulacion ;		//
 *	\return  int : estado siguiente
 */
 
-static int LED ( int  Estado )
-{
-    switch ( Estado )
-    {
-
-        case RESET :
-            f_apagar();
-
-            Estado = APAGADO;
-
-            break;
-
-        case APAGADO :
-            if ( confirmado_on == 1 )
-            {
-                f_encender();
-                simulacion = 0;
-
-                Estado = ENCENDIDO;
-            }
-
-            if ( simulacion == 1 )
-            {
-                f_encender();
-
-                Estado = ENCENDIDO;
-            }
-
-            break;
-
-        case ENCENDIDO :
-            if ( confirmado_off == 1 )
-            {
-                f_apagar();
-                simulacion = 1;
-
-                Estado = APAGADO;
-            }
-
-            if ( simulacion == 0 )
-            {
-                f_apagar();
-
-                Estado = APAGADO;
-            }
-
-            break;
-
-        default:
-            Estado = RESET ;
-            break;
-
-    }
-    return Estado ;
-}
-
 /**
 *	\fn      static int SWITCH ( int Estado )
 *	\brief   Coloque aqui su descripcion
@@ -204,6 +148,63 @@ static int SWITCH ( int  Estado )
     }
     return Estado ;
 }
+
+static int LED ( int  Estado )
+{
+    switch ( Estado )
+    {
+
+        case RESET :
+            f_apagar();
+
+            Estado = APAGADO;
+
+            break;
+
+        case APAGADO :
+            if ( confirmado_on == 1 )
+            {
+                f_encender();
+                simulacion = 0;
+
+                Estado = ENCENDIDO;
+            }
+
+            if ( simulacion == 1 )
+            {
+                f_encender();
+
+                Estado = ENCENDIDO;
+            }
+
+            break;
+
+        case ENCENDIDO :
+            if ( confirmado_off == 1 )
+            {
+                f_apagar();
+                simulacion = 1;
+
+                Estado = APAGADO;
+            }
+
+            if ( simulacion == 0 )
+            {
+                f_apagar();
+
+                Estado = APAGADO;
+            }
+
+            break;
+
+        default:
+            Estado = RESET ;
+            break;
+
+    }
+    return Estado ;
+}
+
 
 /**
 *	\fn      static int MDE4 ( int Estado )

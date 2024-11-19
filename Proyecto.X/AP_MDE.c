@@ -25,10 +25,10 @@
  *** DEFINES PRIVADOS AL MODULO
  ************************************************************************************************************/
 #define		RESET		0	
-//Maquina: BLINK
-#define		APAGADO		1	// < Maquina: BLINK >
-#define		ENCENDIDO		2	// < Maquina: BLINK >
-#define		DESTELLANDO		3	// < Maquina: BLINK >
+//Maquina: LED
+#define		APAGADO		1	// < Maquina: LED >
+#define		ENCENDIDO		2	// < Maquina: LED >
+
 
 //Maquina: SWITCH
 #define		SWITCH_OFF		1	// < Maquina: SWITCH >
@@ -125,7 +125,7 @@ static int SWITCH ( int  Estado )
             {
                 confirmado_on = 1;
                 confirmado_off = 0;
-                f_intoff();
+              
                 f_inton();
 
                 Estado = SWITCH_ON;
@@ -145,7 +145,7 @@ static int SWITCH ( int  Estado )
                 confirmado_off = 1;
                 confirmado_on = 0;
                 f_intoff();
-                f_position();
+             
 
                 Estado = SWITCH_OFF;
             }
@@ -176,6 +176,15 @@ static int LED ( int  Estado ){
             if ( confirmado_on == 1 )
             {
                 f_encender();
+                simulacion = 0;
+
+                Estado = ENCENDIDO;
+            }
+
+            if ( simulacion == 1 )
+            {
+                f_encender();
+
                 Estado = ENCENDIDO;
             }
 
@@ -185,7 +194,14 @@ static int LED ( int  Estado ){
             if ( confirmado_off == 1 )
             {
                 f_apagar();
-                
+                simulacion = 1;
+
+                Estado = APAGADO;
+            }
+
+            if ( simulacion == 0 )
+            {
+                f_apagar();
 
                 Estado = APAGADO;
             }
@@ -200,64 +216,8 @@ static int LED ( int  Estado ){
     }
     return Estado ;
 }
-/*
-static int INTENSIDAd ( int  Estado )
-{
-    switch ( Estado )
-    {
 
-        case RESET :
-            intensidadlvl = 1;
-            Estado = INTENSIDAD;
 
-            break;
-
-        case INTENSIDAD :
-            if ( confirmado_on == 1 && s_llave_up())
-            {
-                f_intup();
-                Estado = INT;
-            }
-            if(confirmado_on==1 && s_llave_down()){
-            
-                f_intdown();
-                Estado= INT;
-            }
-
-            break;
-
-        case INT :
-            if ( confirmado_off == 1 )
-            {
-                Estado = OFF;
-            }
-            if(confirmado_on==1){
-            
-                Estado=INTENSIDAD;
-            }
-
-            break;
-
-        case OFF :
-            if ( confirmado_off == 1 )
-            {
-            }
-           
-            if(confirmado_on==1){
-                    Estado = INTENSIDAD;
-            }
-            
-
-            break;
-
-        default:
-            Estado = RESET ;
-            break;
-
-    }
-    return Estado ;
-}
-*/
 
 static int MDE4 ( int  Estado )
 {
@@ -266,20 +226,14 @@ static int MDE4 ( int  Estado )
     {
 
         case RESET :
-            simulacion = 0;
+            f_noSimula();
 
             Estado = no_simula;
 
             break;
 
         case no_simula :
-            if ( simulacion == 0 && confirmado_on == 1 )
-            {
-
-                Estado = no_simula;
-            }
-
-            if ( confirmado_off == 1 )
+            if ( simulacion == 1 )
             {
                 f_encender();
                 t_simular();
@@ -291,14 +245,23 @@ static int MDE4 ( int  Estado )
             break;
 
         case Simula_ausencia :
-            if ( e_noSimular() )
+            if ( confirmado_on == 1 )
             {
                
                
                 f_noSimula();
-                simulacion = 0;
+                
 
                 Estado = no_simula;
+            }
+
+            if ( e_noSimular() )
+            {
+                f_encender();
+                t_simular_002_S();
+                simulacion = 1;
+
+                Estado = Simula_presencia;
             }
 
             break;
@@ -308,8 +271,16 @@ static int MDE4 ( int  Estado )
             {
                 f_apagar();
                 t_noSimular();
+                simulacion = 0;
 
                 Estado = Simula_ausencia;
+            }
+
+            if ( confirmado_on == 1 )
+            {
+                f_noSimula();
+
+                Estado = no_simula;
             }
 
             break;
@@ -345,7 +316,7 @@ void MaquinaDeEstados ( void )
     static int estados_MDE4 = RESET;
 
     // Coloque su codigo aqui
-    estados_INTENSIDAd = INTENSIDAd(estados_INTENSIDAd);
+   
     estados_LED = LED( estados_LED );
     estados_SWITCH = SWITCH( estados_SWITCH );
     estados_MDE4 = MDE4( estados_MDE4 );

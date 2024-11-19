@@ -34,7 +34,7 @@ void recargar_timer(void);
  ************************************************************************************************************/
 static void Inicializar_LED( void ) ;
 static void Inicializar_SWITCH( void ) ;
-static void Inicializar_INTENSIDAd( void ) ;
+//static void Inicializar_INTENSIDAd( void ) ;
 static void Inicializar_MDE4( void ) ;
 
 
@@ -105,8 +105,10 @@ static void Inicializar_LED( void )
 {
     //!< Coloque aqui su codigo
 	confirmado_on = 0 ;
-	confirmado_off = 1 ;
-	intensidadlvl = 0 ;
+    simulacion = 0 ;
+	confirmado_off = 0 ;
+	
+	
     ANSEL=0;				// Deshabilitacion de canales analogicos
 	ANSELH=0;				// Deshabilitacion de canales analogicos
 	TRISDbits.TRISD0=0;		// PIN 0 DEL PUESTO D ES SALIDA
@@ -139,12 +141,12 @@ static void Inicializar_SWITCH( void )
     return ;
 }
 
-static void Inicializar_INTENSIDAd( void )
+/*static void Inicializar_INTENSIDAd( void )
 {
     //!< Coloque aqui su codigo
 	intensidadlvl=0;
     return ;
-}
+}*/
 
 static void Inicializar_MDE4( void )
 {
@@ -175,8 +177,8 @@ void Inicializar( void )
 	iniciar_timer0();
 	Inicializar_LED( );
     Inicializar_SWITCH( );
-    Inicializar_INTENSIDAd();
-	
+
+	Inicializar_MDE4( );
 
 	
     return ;

@@ -34,8 +34,7 @@
 int s_llave_on ( void );
 int s_llave_off ( void );
 int e_antirebote ( void );
-int s_llave_up ( void );
-int s_llave_down ( void );
+
 int e_simular ( void );
 int e_noSimular ( void );
 
@@ -43,23 +42,20 @@ int e_noSimular ( void );
 
 void f_apagar ( void );
 void f_encender ( void );
-void f_intdown ( void );
-void f_intensidadlvl ( void );
-void f_intensidadup ( void );
+
 //void f_apagarint(void);
-void mover_led(int);
+
 void f_inton(void);
 void f_intoff ( void );
-void f_intup ( void );
+
 void f_noSimula ( void );
-void f_position ( void );
+
 
 /*------------------------------------------TEMPORIZADORES -------------------------------------------------*/
 
 void t_antirebote ( void );
 void t_noSimular ( void );
-void t_noSimular ( void );
-void t_simular ( void );
+
 void t_simular ( void );
 
 #endif /* INC_AP_FUNCIONESMDEE_H_ */
